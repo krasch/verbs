@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Verben</title>
+
+    <script src="data.json"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+<h3 id="conjugated"></h3>
+<h4 id="infinitive"></h4>
+<div id="conjugation" hidden="hidden"></div> <!--answer hidden here in the DOM -->
+
+<div id="options">
+</div>
+
+<script>
+    var timeout;
+    
+    function setChallenge() {
+        // reset button colors
+        for (let form of verbForms.keys()){
+            document.getElementById("answer-"+form).style.backgroundColor = "";
+        }
+    
+        const challenge = getChallenge();
+        
+        document.getElementById("infinitive").textContent = "(" + challenge["infinitive"] + ")";
+        document.getElementById("conjugated").textContent = challenge["conjugated"];
+        document.getElementById("conjugation").textContent = challenge["answer"];
+        
+        timeout = window.setTimeout(checkAnswer, 2500);
+    }
+    
+    
+    function checkAnswer(answer){
+        // don't want automatic timeout to happen after user answered
+        if (timeout != null){
+            clearTimeout(timeout);
+        }
+        
+        
+        const expected = document.getElementById("conjugation").textContent;
+        document.getElementById("answer-"+expected).style.backgroundColor="#6b9c78";
+        
+        
+        if (answer != null && answer != expected){
+            document.getElementById("answer-"+answer).style.backgroundColor="#9e4c4c";
+        }
+        
+        window.setTimeout(setChallenge, 800);
+    }
+    
+
+    function init(){
+        const root = document.getElementById("options");
+
+        for (let form of verbForms.keys()) {
+            const button = document.createElement("button");
+            
+            button.setAttribute("id", "answer-"+form);
+            button.innerText = verbFormsTranslation.get(verbForms.get(form));
+            button.onclick = () => checkAnswer(form);
+
+            root.appendChild(button);
+        }
+        setChallenge();
+    }
+
+    init();
+</script>
+
+</body>
+</html>
