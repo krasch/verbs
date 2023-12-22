@@ -14,8 +14,9 @@
 
 <div id="clickarea">
     <div id="challenge" onclick="showAnswer()">
-        <h1 id="infinitive"></h1>
         <h2 id="person"></h2>
+        <h1 id="infinitive"></h1>
+        <h2 id="time"></h2>
     </div>
     <div id="answer" onclick="setChallenge()">
         <h1 id="conjugated"></h1>
@@ -27,16 +28,22 @@
     function showAnswer(){
         const infinitive = document.getElementById("infinitive").textContent;
         const person = document.getElementById("person").textContent;
-        const answer = getConjugation(infinitive, person);
+        const time = document.getElementById("time").textContent;
 
+        const answer = getConjugation(infinitive, person, time);
         document.getElementById("conjugated").textContent = answer;
+
         document.getElementById("challenge").style.display = "none"
         document.getElementById("answer").style.display = "flex"
     }
 
     function setChallenge(){
-        document.getElementById("infinitive").textContent = getRandomInfinitive();
-        document.getElementById("person").textContent = getRandomPerson();
+        const [infinitive, person, time] = getChallenge();
+
+        document.getElementById("infinitive").textContent = infinitive;
+        document.getElementById("person").textContent = person;
+        document.getElementById("time").textContent = time;
+
         document.getElementById("challenge").style.display = "flex"
         document.getElementById("answer").style.display = "none"
     }

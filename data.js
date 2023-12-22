@@ -20,6 +20,29 @@ const isVowel = char => /[aeiouéè]/i.test(char);
 
 const verbs = objectToMap(verbs_);
 
+const columns = objectToMap({
+    "présent indicatif": 0,
+    "présent subjonctif": 1,
+    "imparfait indicatif": 2,
+    "imparfait subjonctif": 3,
+    "conditionnel présent": 4,
+    "futur simple": 5,
+    "passé simple": 6,
+    "aux": 7,
+    "participe passé": 8,
+    "groupe": 9
+})
+
+const times = [
+    "présent indicatif",
+    /*"présent subjonctif",
+    "imparfait indicatif",
+    "imparfait subjonctif",
+    "conditionnel présent",
+    "futur simple",
+    "passé simple",*/
+]
+
 const persons = objectToMap({
     0: ["je"],
     1: ["tu"],
@@ -53,17 +76,18 @@ function prepareForDisplay(person, conjugated){
         return person + " " + conjugated
 }
 
-function getRandomInfinitive() {
-    return verbs.random()
+function getChallenge() {
+    const infinitive = verbs.random();
+    const person = persons.get(persons.random()).random();
+    const time = times.random();
+    return [infinitive, person, time]
 }
 
-function getRandomPerson() {
-    return persons.get(persons.random()).random();
-}
-
-function getConjugation(infinitive, person){
+function getConjugation(infinitive, person, time){
     const personIndex = personsInverse.get(person);
-    const conjugated = verbs.get(infinitive)[personIndex];
+    const timeIndex = columns.get(time);
+
+    const conjugated = verbs.get(infinitive)[timeIndex][personIndex];
     return prepareForDisplay(person, conjugated);
 }
 
