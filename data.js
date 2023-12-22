@@ -38,7 +38,7 @@ const personsInverse = objectToMap({
     "nous": 3,
     "vous": 4,
     "elles": 5,
-    "ils": 6
+    "ils": 5
 })
 
 
