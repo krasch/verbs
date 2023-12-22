@@ -12,67 +12,37 @@
 
 <body>
 
-<h3 id="conjugated"></h3>
-<h4 id="infinitive"></h4>
-<div id="conjugation" hidden="hidden"></div> <!--answer hidden here in the DOM -->
-
-<div id="options">
+<div id="clickarea">
+    <div id="challenge" onclick="showAnswer()">
+        <h1 id="infinitive"></h1>
+        <h2 id="person"></h2>
+    </div>
+    <div id="answer" onclick="setChallenge()">
+        <h1 id="conjugated"></h1>
+    </div>
 </div>
 
 <script>
-    var timeout;
-    
-    function setChallenge() {
-        // reset button colors
-        for (let form of verbForms.keys()){
-            document.getElementById("answer-"+form).style.backgroundColor = "";
-        }
-    
-        const challenge = getChallenge();
-        
-        document.getElementById("infinitive").textContent = "(" + challenge["infinitive"] + ")";
-        document.getElementById("conjugated").textContent = challenge["conjugated"];
-        document.getElementById("conjugation").textContent = challenge["answer"];
-        
-        timeout = window.setTimeout(checkAnswer, 2500);
-    }
-    
-    
-    function checkAnswer(answer){
-        // don't want automatic timeout to happen after user answered
-        if (timeout != null){
-            clearTimeout(timeout);
-        }
-        
-        
-        const expected = document.getElementById("conjugation").textContent;
-        document.getElementById("answer-"+expected).style.backgroundColor="#6b9c78";
-        
-        
-        if (answer != null && answer != expected){
-            document.getElementById("answer-"+answer).style.backgroundColor="#9e4c4c";
-        }
-        
-        window.setTimeout(setChallenge, 800);
-    }
-    
 
-    function init(){
-        const root = document.getElementById("options");
+    function showAnswer(){
+        const infinitive = document.getElementById("infinitive").textContent;
+        const person = document.getElementById("person").textContent;
+        const answer = getConjugation(infinitive, person);
 
-        for (let form of verbForms.keys()) {
-            const button = document.createElement("button");
-            
-            button.setAttribute("id", "answer-"+form);
-            button.innerText = verbFormsTranslation.get(verbForms.get(form));
-            button.onclick = () => checkAnswer(form);
-
-            root.appendChild(button);
-        }
-        setChallenge();
+        document.getElementById("conjugated").textContent = answer;
+        document.getElementById("challenge").style.display = "none"
+        document.getElementById("answer").style.display = "flex"
     }
 
-    init();
+    function setChallenge(){
+        document.getElementById("infinitive").textContent = getRandomInfinitive();
+        document.getElementById("person").textContent = getRandomPerson();
+        document.getElementById("challenge").style.display = "flex"
+        document.getElementById("answer").style.display = "none"
+    }
+
+    setChallenge();
+
 </script>
 
 </body>
