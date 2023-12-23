@@ -87,6 +87,7 @@
 
     function hideConfigModal() {
         document.getElementById("config-modal").style.display = "none";
+        setChallenge(); // because current challenge might not match the config anymore
     }
 
     setChallenge();
