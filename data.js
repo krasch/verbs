@@ -12,6 +12,10 @@ Map.prototype.random = function () {
   return Array.from(this.keys()).random();
 }
 
+Map.prototype.filterValues = function(filterFunction) {
+   return new Map([...this].filter(e => filterFunction(e[1])));  //e[0] = key, e[1] = value
+}
+
 const isVowel = char => /[aeiouéè]/i.test(char);
 
 /***************************************
@@ -30,18 +34,8 @@ const columns = objectToMap({
     "passé simple": 6,
     "aux": 7,
     "participe passé": 8,
-    "groupe": 9
+    "group": 9
 })
-
-const times = [
-    "présent indicatif",
-    /*"présent subjonctif",
-    "imparfait indicatif",
-    "imparfait subjonctif",
-    "conditionnel présent",
-    "futur simple",
-    "passé simple",*/
-]
 
 const persons = objectToMap({
     0: ["je"],
@@ -76,10 +70,14 @@ function prepareForDisplay(person, conjugated){
         return person + " " + conjugated
 }
 
-function getChallenge() {
-    const infinitive = verbs.random();
+function getChallenge(selectedTimes, selectedGroups) {
+    const col = columns.get("group");
+    const matchingVerbs = verbs.filterValues(e => selectedGroups.includes(e[col]));
+
+    const infinitive = matchingVerbs.random();
     const person = persons.get(persons.random()).random();
-    const time = times.random();
+    const time = selectedTimes.random();
+
     return [infinitive, person, time]
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,9 +23,40 @@
     </div>
 </div>
 
+<div id="config-icon" onclick="showConfigModal()">
+    ⚙
+</div>
+
+<div id="config-modal" style="display: none">
+    <form method="post">
+        <h1>Conjugations</h1>
+        <fieldset id="config-time">
+            <input type="checkbox" name="time" value="présent indicatif" checked="checked">présent indicatif</input><br>
+            <input type="checkbox" name="time" value="présent subjonctif" checked="checked">présent subjonctif</input><br>
+            <input type="checkbox" name="time" value="imparfait indicatif" checked="checked"> imparfait indicatif</input><br>
+            <input type="checkbox" name="time" value="imparfait subjonctif" checked="checked">imparfait subjonctif</input><br>
+            <input type="checkbox" name="time" value="conditionnel présent" checked="checked">conditionnel présent</input><br>
+            <input type="checkbox" name="time" value="futur simple" checked="checked">futur simple</input><br>
+        </fieldset>
+        <h1>Groups</h1>
+        <fieldset id="config-group">
+            <input type="checkbox" name="group" value="1" checked="checked">premiere</input><br>
+            <input type="checkbox" name="group" value="2" checked="checked">deuxieme</input><br>
+            <input type="checkbox" name="group" value="3" checked="checked">troisieme</input><br>
+        </fieldset>
+        <br/>
+        <input type="button" value="OK" onclick="hideConfigModal()"/>
+    </form>
+</div>
+
 <script>
 
-    function showAnswer(){
+    function getCheckedBoxValues(checkboxGroupname){
+        const selector = "input[type=checkbox][name="+checkboxGroupname+"]:checked";
+        return Array.from(document.querySelectorAll(selector)).map(e => e.value);
+    }
+
+    function showAnswer() {
         const infinitive = document.getElementById("infinitive").textContent;
         const person = document.getElementById("person").textContent;
         const time = document.getElementById("time").textContent;
@@ -37,8 +68,10 @@
         document.getElementById("answer").style.display = "flex"
     }
 
-    function setChallenge(){
-        const [infinitive, person, time] = getChallenge();
+    function setChallenge() {
+        const selectedTimes = getCheckedBoxValues("time");
+        const selectedGroups = getCheckedBoxValues("group").map(e => parseInt(e));
+        const [infinitive, person, time] = getChallenge(selectedTimes, selectedGroups);
 
         document.getElementById("infinitive").textContent = infinitive;
         document.getElementById("person").textContent = person;
@@ -46,6 +79,14 @@
 
         document.getElementById("challenge").style.display = "flex"
         document.getElementById("answer").style.display = "none"
+    }
+
+    function showConfigModal() {
+        document.getElementById("config-modal").style.display = "flex";
+    }
+
+    function hideConfigModal() {
+        document.getElementById("config-modal").style.display = "none";
     }
 
     setChallenge();

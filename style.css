@@ -29,7 +29,7 @@ body {
     justify-content: center;
 }
 
-h1, h2 {
+#clickarea > h1, h2 {
     margin: 0;
     align-self: center;
     justify-self: center;
@@ -37,4 +37,29 @@ h1, h2 {
 
 #person, #time {
     color: darkgrey;
+}
+
+#config-icon {
+    position: absolute;
+    left: 90%;
+    top: 10%;
+    font-size: 3em;
+    cursor: pointer;
+}
+
+#config-modal {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+fieldset {
+    border-width: 0px;
 }
