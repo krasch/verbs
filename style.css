@@ -1,6 +1,7 @@
 body {
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
@@ -41,8 +42,8 @@ body {
 
 #config-icon {
     position: absolute;
-    left: 90%;
-    top: 10%;
+    top: 30px;
+    right: 30px;
     font-size: 3em;
     cursor: pointer;
 }
