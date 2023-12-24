@@ -71,8 +71,9 @@ function prepareForDisplay(person, conjugated){
 }
 
 function getChallenge(selectedTimes, selectedGroups) {
+    const group = selectedGroups.random();
     const col = columns.get("group");
-    const matchingVerbs = verbs.filterValues(e => selectedGroups.includes(e[col]));
+    const matchingVerbs = verbs.filterValues(e => e[col] === group);
 
     const infinitive = matchingVerbs.random();
     const person = persons.get(persons.random()).random();
