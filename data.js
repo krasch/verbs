@@ -12,6 +12,11 @@ Map.prototype.random = function () {
   return Array.from(this.keys()).random();
 }
 
+Map.prototype.filterKeys = function(filterFunction) {
+   return new Map([...this].filter(e => filterFunction(e[0])));  //e[0] = key, e[1] = value
+}
+
+
 Map.prototype.filterValues = function(filterFunction) {
    return new Map([...this].filter(e => filterFunction(e[1])));  //e[0] = key, e[1] = value
 }
@@ -70,10 +75,19 @@ function prepareForDisplay(person, conjugated){
         return person + " " + conjugated
 }
 
-function getChallenge(selectedTimes, selectedGroups) {
-    const group = selectedGroups.random();
+function filterVerbsByGroup(selectedGroups){
     const col = columns.get("group");
-    const matchingVerbs = verbs.filterValues(e => e[col] === group);
+    return verbs.filterValues(e => selectedGroups.includes(e[col]));
+}
+
+function getChallenge(selectedTimes, selectedGroups, selectedVerbs) {
+    // first randomly select a group so that all groups appear with same probability in a challenge
+    const group = selectedGroups.random();
+    const verbsInGroups = filterVerbsByGroup([group]);
+
+    // remove verbs that the user specifically deselected
+    const matchingVerbs = verbsInGroups.filterKeys(e => selectedVerbs.includes(e));
+    console.log(matchingVerbs);
 
     const infinitive = matchingVerbs.random();
     const person = persons.get(persons.random()).random();

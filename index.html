@@ -14,8 +14,8 @@
 
 <div id="clickarea">
     <div id="challenge" onclick="showAnswer()">
-        <h2 id="person"></h2>
-        <h1 id="infinitive"></h1>
+        <h2 id="person">il</h2>
+        <h1 id="infinitive">changer</h1>
         <h2 id="time"></h2>
     </div>
     <div id="answer" onclick="setChallenge()">
@@ -40,10 +40,18 @@
         </fieldset>
         <h1>Groups</h1>
         <fieldset id="config-group">
-            <input type="checkbox" name="group" value="1" checked="checked">premiere</input><br>
-            <input type="checkbox" name="group" value="2" checked="checked">deuxieme</input><br>
-            <input type="checkbox" name="group" value="3" checked="checked">troisieme</input><br>
+            <input type="checkbox" name="group" value="1" checked="checked" onchange="updateVerbList()">premiere</input><br>
+            <input type="checkbox" name="group" value="2" checked="checked" onchange="updateVerbList()">deuxieme</input><br>
+            <input type="checkbox" name="group" value="3" checked="checked" onchange="updateVerbList()">troisieme</input><br>
         </fieldset>
+        <br/>
+        <details>
+          <summary>Pick specific verbs from these groups</summary>
+            <a href="#" onclick="checkAll('verb')">Check all</a>
+            <a href="#" onclick="uncheckAll('verb')"> Uncheck all</a><br/>
+            <fieldset id="config-verbs">
+            </fieldset>
+        </details>
         <br/>
         <input type="button" value="OK" onclick="hideConfigModal()"/>
     </form>
@@ -71,7 +79,8 @@
     function setChallenge() {
         const selectedTimes = getCheckedBoxValues("time");
         const selectedGroups = getCheckedBoxValues("group").map(e => parseInt(e));
-        const [infinitive, person, time] = getChallenge(selectedTimes, selectedGroups);
+        const selectedVerbs = getCheckedBoxValues("verb");
+        const [infinitive, person, time] = getChallenge(selectedTimes, selectedGroups, selectedVerbs);
 
         document.getElementById("infinitive").textContent = infinitive;
         document.getElementById("person").textContent = person;
@@ -90,6 +99,45 @@
         setChallenge(); // because current challenge might not match the config anymore
     }
 
+    function updateVerbList(){
+        const selectedGroups = getCheckedBoxValues("group").map(e => parseInt(e));
+        const matchingVerbs = Array.from(filterVerbsByGroup(selectedGroups).keys());
+
+        const container = document.getElementById("config-verbs");
+        container.innerHTML = '';
+
+        for (let verb of matchingVerbs.sort()){
+            let div = document.createElement('div');
+            container.appendChild(div);
+
+            let checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.name = "verb";
+            checkbox.value = verb;
+            checkbox.id = "config-verbs-"+verb;
+            checkbox.checked = true;
+            div.appendChild(checkbox);
+
+            let label = document.createElement('label');
+            label.htmlFor = "config-verbs-"+verb;
+            label.appendChild(document.createTextNode(verb));
+            div.appendChild(label);
+        }
+    }
+
+    function checkAll(checkboxGroupname){
+        const selector = "input[type=checkbox][name="+checkboxGroupname+"]";
+        for (checkbox of document.querySelectorAll(selector))
+            checkbox.checked = true;
+    }
+
+    function uncheckAll(checkboxGroupname){
+        const selector = "input[type=checkbox][name="+checkboxGroupname+"]";
+        for (checkbox of document.querySelectorAll(selector))
+            checkbox.checked = false;
+    }
+
+    updateVerbList();
     setChallenge();
 
 </script>

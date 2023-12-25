@@ -1,7 +1,9 @@
 body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
 
     display: flex;
     flex-direction: column;
@@ -61,6 +63,13 @@ body {
     justify-content: center;
 }
 
-fieldset {
+#config-modal fieldset {
     border-width: 0px;
+}
+
+#config-modal #config-verbs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 300px;
 }
