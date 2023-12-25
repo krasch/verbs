@@ -33,11 +33,21 @@
         <fieldset id="config-time">
             <input type="checkbox" name="time" value="présent indicatif" checked="checked">présent indicatif</input><br>
             <input type="checkbox" name="time" value="présent subjonctif" checked="checked">présent subjonctif</input><br>
-            <input type="checkbox" name="time" value="imparfait indicatif" checked="checked"> imparfait indicatif</input><br>
+            <input type="checkbox" name="time" value="imparfait indicatif" checked="checked">imparfait indicatif</input><br>
             <input type="checkbox" name="time" value="imparfait subjonctif" checked="checked">imparfait subjonctif</input><br>
             <input type="checkbox" name="time" value="conditionnel présent" checked="checked">conditionnel présent</input><br>
             <input type="checkbox" name="time" value="futur simple" checked="checked">futur simple</input><br>
         </fieldset>
+        <h1>Persons</h1>
+        <fieldset id="config-person">
+            <input type="checkbox" name="person" value="0" checked="checked">je</input>
+            <input type="checkbox" name="person" value="1" checked="checked">tu</input>
+            <input type="checkbox" name="person" value="2" checked="checked">on/elle/il</input><br>
+            <input type="checkbox" name="person" value="3" checked="checked">nous</input>
+            <input type="checkbox" name="person" value="4" checked="checked">vous</input>
+            <input type="checkbox" name="person" value="5" checked="checked">elles/illes</input><br>
+        </fieldset>
+        <br/>
         <h1>Groups</h1>
         <fieldset id="config-group">
             <input type="checkbox" name="group" value="1" checked="checked" onchange="updateVerbList()">premiere</input><br>
@@ -78,9 +88,10 @@
 
     function setChallenge() {
         const selectedTimes = getCheckedBoxValues("time");
+        const selectedPersons = getCheckedBoxValues("person");
         const selectedGroups = getCheckedBoxValues("group").map(e => parseInt(e));
         const selectedVerbs = getCheckedBoxValues("verb");
-        const [infinitive, person, time] = getChallenge(selectedTimes, selectedGroups, selectedVerbs);
+        const [infinitive, person, time] = getChallenge(selectedTimes, selectedPersons, selectedGroups, selectedVerbs);
 
         document.getElementById("infinitive").textContent = infinitive;
         document.getElementById("person").textContent = person;

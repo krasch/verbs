@@ -42,6 +42,7 @@ const columns = objectToMap({
     "group": 9
 })
 
+// somehow object to map turns int keys into string keys
 const persons = objectToMap({
     0: ["je"],
     1: ["tu"],
@@ -80,17 +81,16 @@ function filterVerbsByGroup(selectedGroups){
     return verbs.filterValues(e => selectedGroups.includes(e[col]));
 }
 
-function getChallenge(selectedTimes, selectedGroups, selectedVerbs) {
+function getChallenge(selectedTimes, selectedPersons, selectedGroups, selectedVerbs) {
     // first randomly select a group so that all groups appear with same probability in a challenge
     const group = selectedGroups.random();
     const verbsInGroups = filterVerbsByGroup([group]);
 
     // remove verbs that the user specifically deselected
     const matchingVerbs = verbsInGroups.filterKeys(e => selectedVerbs.includes(e));
-    console.log(matchingVerbs);
 
     const infinitive = matchingVerbs.random();
-    const person = persons.get(persons.random()).random();
+    const person = persons.get(selectedPersons.random()).random();
     const time = selectedTimes.random();
 
     return [infinitive, person, time]
