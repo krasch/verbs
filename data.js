@@ -62,12 +62,20 @@ const personsInverse = objectToMap({
     "vous": 4,
     "elles": 5,
     "ils": 5
-})
+});
 
+const auxTimes = objectToMap({
+    "passé composé": "présent indicatif",
+    "plus-que-parfait indicatif": "imparfait indicatif",
+    "futur antérieur": "futur simple",
+    "passé subjonctif": "présent subjonctif",
+    "conditionnel passé": "conditionnel présent"
+})
 
 /***************************************
  *   functions
  ***************************************/
+
 
 function prepareForDisplay(person, conjugated){
     if ((person === "je") && (isVowel(conjugated[0])))
@@ -96,12 +104,32 @@ function getChallenge(selectedTimes, selectedPersons, selectedGroups, selectedVe
     return [infinitive, person, time]
 }
 
+
 function getConjugation(infinitive, person, time){
     const personIndex = personsInverse.get(person);
-    const timeIndex = columns.get(time);
 
-    const conjugated = verbs.get(infinitive)[timeIndex][personIndex];
-    return prepareForDisplay(person, conjugated);
+    if (columns.has(time)){
+        const timeIndex = columns.get(time);
+        const conjugated = verbs.get(infinitive)[timeIndex][personIndex];
+        return prepareForDisplay(person, conjugated);
+    }
+    else {
+        const auxIndex = columns.get("aux");
+        const aux = verbs.get(infinitive)[auxIndex];
+
+        const participleIndex = columns.get("participe passé");
+        let participle = verbs.get(infinitive)[participleIndex];
+
+        if (aux === "être"){
+            if (["nous", "vous", "ils", "elles"].includes(person))
+                participle += "·e·s"
+            else
+                participle += "·e"
+        }
+
+        const auxConjugated = getConjugation(aux, person, auxTimes.get(time));
+        return auxConjugated + " " + participle
+    }
 }
 
 
